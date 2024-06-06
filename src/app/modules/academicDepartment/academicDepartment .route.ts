@@ -17,3 +17,5 @@ academicDepartmentRoute.get("/", getAllAcademicDepartment);
 academicDepartmentRoute.get("/:departmentID", getSingleAcademicDepartment);
 
 academicDepartmentRoute.put("/:departmentId", updateAcademicDepartment);
+
+export default academicDepartmentRoute;

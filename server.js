@@ -10,6 +10,8 @@ import userRouter from "./dist/app/modules/user/user.routes";
 import globalEroorHandler from "./src//app/middleware/globalEroorHandler";
 import notFoundHandler from "./src/app/middleware/notFound";
 import semesterRouter from "./src/app/modules/academicSemester/academicSevester.route";
+import academicFacultyRouter from "./src/app/modules/academicFaculty/academicFaculty.route";
+import academicDepartmentRoute from "./src/app/modules/academicDepartment/academicDepartment .route";
 //Middleware to parse JSON request bodies
 app.use(express.json());
 app.use(cors());
@@ -29,6 +31,14 @@ const moduleRoute = [
   {
     path: "/api/v1/academic-semester",
     router: semesterRouter,
+  },
+  {
+    path: "/api/v1/academic-faculty",
+    router: academicFacultyRouter,
+  },
+  {
+    path: "/api/v1/academic-department",
+    router: academicDepartmentRoute,
   },
 ];
 moduleRoute.forEach((route) => app.use(route.path, route.router));
