@@ -10,7 +10,6 @@ const PreRequisitesCourseSchema = new Schema<TPreRequisitesCourse>({
   course: {
     type: Schema.Types.ObjectId,
     ref: "Course",
-    required: true,
   },
   isDeleted: {
     type: Boolean,
@@ -68,11 +67,11 @@ const courseFacultySchema = new Schema<TCourseFaculty>({
   faculty: [
     {
       type: Schema.Types.ObjectId,
-      ref: "faculty",
+      ref: "Faculty",
     },
   ],
 });
-export const CourseFacultyModel = model<TCourse>(
+export const CourseFacultyModel = model<TCourseFaculty>(
   "CourseFacultyModel",
   courseFacultySchema
 );

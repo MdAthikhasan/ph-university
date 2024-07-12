@@ -11,7 +11,7 @@ export type TCourse = {
   code: string;
   credits: number;
   isDeleted: boolean;
-  preRequisites: string[];
+  preRequisites: [TPreRequisitesCourse];
   createdAt: Date;
   updatedAt: Date;
 };

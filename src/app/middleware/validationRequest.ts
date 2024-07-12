@@ -7,8 +7,9 @@ export const shenabahini = (shema: AnyZodObject) => {
       await shema.parseAsync({
         body: req.body,
       });
-    } catch (error) {
-      next(error);
+      next();
+    } catch (error: any) {
+      next(error.message);
     }
   };
 };

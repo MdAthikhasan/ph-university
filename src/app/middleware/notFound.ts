@@ -8,5 +8,6 @@ export const notFoundHandler = (
   return res.status(404).json({
     success: false,
     message: "API not found!",
+    error: "",
   });
 };

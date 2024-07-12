@@ -3,12 +3,18 @@ import { userController } from "./user.controller";
 const userRouter = express.Router();
 import userSchemaValidation from "./user.validation";
 import { shenabahini } from "../../middleware/validationRequest";
+import { upload } from "../../multer/multer";
 //army middlewareDef
 
 // route defination
 userRouter.post(
   "/create-student",
-  shenabahini(userSchemaValidation),
+  upload.single("image"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  // shenabahini(userSchemaValidation),
   userController
 );
 

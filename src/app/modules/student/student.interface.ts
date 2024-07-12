@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 export interface Tstudent {
   id: string;
   user: Types.ObjectId;
-  password: string;
   name: string;
   gender: string;
   dateOfBirth: number;

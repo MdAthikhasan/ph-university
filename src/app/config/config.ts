@@ -9,4 +9,6 @@ export default {
   database_url: process.env.MONGODB_URL,
   bcrypt_salt_rounds: process.env.BCRYPT_ROUND,
   default_password: process.env.DEFAULT_PASS,
+  jwt_secret: process.env.JWT_SECRET,
+  jwt_refresh: process.env.JWT_REFRESH,
 };

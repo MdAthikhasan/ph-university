@@ -1,18 +1,45 @@
 import { Request, Response, NextFunction } from "express";
 import StudentModel from "./student.model";
 import QueryBuilder from "../../builder/QueryBuilder";
+import httpStatus from "http-status";
+
+const createStudent = async (req: Request, res: Response) => {
+  const result = await StudentModel.create(req.body);
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: "student created succesfully",
+    data: result,
+  });
+};
 const getAllStudent = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const searchQuery = new QueryBuilder(StudentModel.find(), req.query)
-      .search(["email", "name.firstName"])
-      .filter()
-      .sort()
-      .paginate()
-      .fields();
+    const queryCopy = { ...req.query };
+    const query = { email: { $regex: req.query.searchTerm, $options: "i" } };
+    const searchQuery = StudentModel.find(query);
+
+    delete queryCopy.searchTerm;
+    delete queryCopy.select;
+    delete queryCopy.limit;
+    delete queryCopy.page;
+    console.log(req.query);
+    // const filterQuery = searchQuery.find(queryCopy);
+
+    const a = (Number(req.query.page) - 1) * Number(req.query.limit);
+
+    const skitFields = searchQuery.skip(a);
+    const limitQuery = skitFields.limit(req.query.limit as unknown as number);
+    const selecFields = await limitQuery.select(req.query.select as string);
+
+    // const searchQuery = new QueryBuilder(StudentModel.find(), req.query)
+    //   .search(["email", "name.firstName"])
+    //   .filter()
+    //   .sort()
+    //   .paginate()
+    //   .fields();
 
     // {email:{$regex:{searchTerm}}}
 
@@ -63,10 +90,10 @@ const getAllStudent = async (
 
     // const filedsQuery = await limitQuery.select(fields);
 
-    res.json({
+    res.status(httpStatus.OK).json({
       success: true,
       message: "all student data got from mongodb",
-      data: searchQuery.modelQuery,
+      data: selecFields,
     });
   } catch (error) {
     next(error);
@@ -95,6 +122,7 @@ const getSingleStudent = async (
   }
 };
 export default {
+  createStudent,
   getAllStudent,
   getSingleStudent,
 };

@@ -8,14 +8,12 @@ const guardianSchema = new Schema({
   lastName: typeDefination,
 });
 const studentSchema = new Schema<Tstudent>({
-  id: { type: String, required: [true, "Id is required"], unique: true },
+  id: { type: String, required: [true, "Id is required"] },
   user: {
     type: Schema.Types.ObjectId,
-    required: [true, "userid must required"],
-    unique: true,
+    required: [true, "User id must required"],
     ref: "user",
   },
-  // password: { type: String, required: true },
   name: { type: String, required: true },
   gender: { type: String, required: [true, "gender is required"] },
   dateOfBirth: { type: Number, required: true },
@@ -32,7 +30,7 @@ const studentSchema = new Schema<Tstudent>({
   },
   profile_image: { type: String, required: true },
   addmissionSemester: { type: String, required: true },
-  isDeleted: { type: Boolean, required: true },
+  isDeleted: { type: Boolean, required: true, default: false },
 });
 const StudentModel = model("Student", studentSchema);
 export default StudentModel;

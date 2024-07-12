@@ -40,7 +40,9 @@ export const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 };
 
 export const getSingleCoursesFromDB = async (id: string) => {
-  const result = await Course.findById(id);
+  const result = await Course.findById(id).populate(
+    "PreRequisitesCourseSchema.course"
+  );
   return result;
 };
 
@@ -52,10 +54,10 @@ export const updateCourseIntoBD = async (
   id: string,
   payload: Partial<TCourse>
 ) => {
-  const { PreRequisitesCourse, ...courseRemainingData } = payload;
+  const { preRequisites, ...courseRemainingData } = payload;
   try {
     const session = mongoose.startSession();
-    session.startTransaction();
+    (await session).startTransaction();
     const updateBasicInfoData = await Course.findByIdAndUpdate(
       id,
       courseRemainingData,
@@ -63,14 +65,15 @@ export const updateCourseIntoBD = async (
         new: true,
         runValidators: true,
         session,
-      }
+      },
+       
     );
     if (!updateBasicInfoData) {
-      throw new AppError(httpStatus.BAD_REQUEST, "Faild to update ");
+      throw new AppError(httpStatus.BAD_REQUEST, "Faild to update course ");
     }
     // checking if there is any prerequisite to update
-    if (PreRequisitesCourse && PreRequisitesCourse.length > 0) {
-      const deletedRreRequisite = PreRequisitesCourse.filter(
+    if (preRequisites && preRequisites.length > 0) {
+      const deletedRreRequisite = preRequisites.filter(
         (el) => el.course && el.isDeleted
       ).map((el) => el.course);
       const deletedRreRequisiteCourse = await Course.findOneAndUpdate(

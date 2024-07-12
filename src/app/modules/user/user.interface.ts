@@ -1,30 +1,38 @@
-export type Tuser = {
+import { Model, Schema, model } from "mongoose";
+export interface Tuser {
   id: string;
+  email:string;
   password: string;
   needPasswordChange: boolean;
+  passwordChangedAt?:Date;
   role: string;
   status: string;
   isDeleted: boolean;
-};
-
-import { Model, Schema, model } from "mongoose";
-
-interface IUser {
-  name: string;
 }
 
-interface UserModel extends Model<IUser> {
-  myStaticMethod(): number;
+export interface UserModelInterface extends Model<Tuser> {
+  isUserExistByCustomId(id: string): Promise<Tuser>;
+  isPasswordMatched(
+    plainPassword: string,
+    hasedPassword: string
+  ): Promise<Boolean>;
 }
+// interface IUser {
+//   name: string;
+// }
 
-const schema = new Schema<IUser, UserModel>({
-  name: String,
-  myStaticMethod: Number,
-});
-schema.static("myStaticMethod", function myStaticMethod() {
-  return 42;
-});
+// interface UserModel extends Model<TUser> {
+//   myStaticMethod(): number;
+// }
 
-const User = model<IUser, UserModel>("User", schema);
+// const schema = new Schema<IUser, UserModel>({
+//   name: String,
+//   myStaticMethod: Number,
+// });
+// schema.static("myStaticMethod", function myStaticMethod() {
+//   return 42;
+// });
 
-const answer: number = User.myStaticMethod();
+// const User = model<IUser, UserModel>("User", schema);
+
+// const answer: number = User.myStaticMethod();
